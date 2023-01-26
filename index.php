@@ -4,9 +4,9 @@
 
 class Stipendio
 {
-    private $mensile;
-    private $tredicesima;
-    private $quattordicesima;
+    public $mensile;
+    public $tredicesima;
+    public $quattordicesima;
 
     public function __construct($mensile, $tredicesima, $quattordicesima)
     {
@@ -128,6 +128,47 @@ class Persona
     }
 }
 
+// classe impiegato:
+class Impiegato extends Persona
+{
+    private Stipendio $stipendio;
+    private $dataAssunzione;
+
+    public function __construct($nome, $cognome, $dataNascita, $luogoNascita, $cf, Stipendio $stipendio, $dataAssunzione)
+    {
+        parent::__construct($nome, $cognome, $dataNascita, $luogoNascita, $cf);
+        $this->setStipendio($stipendio);
+        $this->setDataAssunzione($dataAssunzione);
+    }
+    public function setStipendio(Stipendio $stipendio)
+    {
+        $this->stipendio = $stipendio;
+    }
+    public function getStipendio()
+    {
+        return $this->stipendio;
+    }
+    public function setDataAssunzione($dataAssunzione)
+    {
+        $this->dataAssunzione = $dataAssunzione;
+    }
+    public function getDataAssunzione()
+    {
+        return $this->dataAssunzione;
+    }
+
+    public function getHtmlImpiegato()
+    {
+        return $this->getHtmlPersona() .
+            "<ul>
+            <li>Stipendio Annuale: " . $this->getStipendio() . "</li>" .
+            "<li>Data di assunzione: " . $this->getDataAssunzione() . "</li>" .
+            "</ul>";
+    }
+}
+
+
+
 echo "STIPENDIO:";
 $stipendio1 = new Stipendio("1500", "si", "si");
 echo $stipendio1->getHtmlStipendio();
@@ -137,3 +178,9 @@ echo "----------------------------------------------------------<br><br>";
 echo "PERSONA:";
 $persona = new Persona("Pinco", "Pallo", "1978-12-10", "Roma", "JDIOWE390E23732");
 echo $persona->getHtmlPersona();
+
+echo "----------------------------------------------------------<br><br>";
+
+echo "IMPIEGATO:";
+$impiegato = new Impiegato("Pinco", "Pallo", "1978-12-10", "Roma", "JDIOWE390E23732", "1200", "23712893729302");
+echo $impiegato->getHtmlImpiegato();
