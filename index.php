@@ -43,7 +43,15 @@ class Stipendio
     // metodo che restituisce lo stipendio annuale:
     public function getStipendioAnnuo()
     {
-        return ($this->getMensile() * 12) + $this->getTredicesima() + $this->getQuattordicesima();
+        $mesi = 12;
+        if ($this->tredicesima) {
+            $mesi += 1;
+
+            if ($this->quattordicesima) {
+                $mesi += 1;
+            }
+        }
+        return $mesi * $this->mensile;
     }
     public function getHtmlStipendio()
     {
@@ -52,6 +60,7 @@ class Stipendio
                 <li>Mensile: " . $this->getMensile() . "</li>" .
             "<li> Tredicesima: " . $this->getTredicesima() . "</li>" .
             "<li>Quattordicesima: " . $this->getQuattordicesima() . "</li>" .
+            "<li>Stipendio Annuo: " . $this->getStipendioAnnuo() . "</li>" .
             "</ul>";
     }
 }
@@ -159,19 +168,18 @@ class Impiegato extends Persona
 
     public function getHtmlImpiegato()
     {
-        return $this->getHtmlPersona() .
+        return parent::getHtmlPersona() .
             "<ul>
-            <li>Stipendio Annuale: " . $this->getStipendio() . "</li>" .
+            <li>Stipendio Annuale: " . $this->getStipendio()->getStipendioAnnuo() . "</li>" .
             "<li>Data di assunzione: " . $this->getDataAssunzione() . "</li>" .
             "</ul>";
     }
 }
 
-
-
 echo "STIPENDIO:";
-$stipendio1 = new Stipendio("1500", "si", "si");
+$stipendio1 = new Stipendio("1500", true, true);
 echo $stipendio1->getHtmlStipendio();
+
 
 echo "----------------------------------------------------------<br><br>";
 
@@ -182,5 +190,7 @@ echo $persona->getHtmlPersona();
 echo "----------------------------------------------------------<br><br>";
 
 echo "IMPIEGATO:";
-$impiegato = new Impiegato("Pinco", "Pallo", "1978-12-10", "Roma", "JDIOWE390E23732", "1200", "23712893729302");
+$impiegato = new Impiegato("Pinco", "Pallo", "1978-12-10", "Roma", "JDIOWE390E23732", new Stipendio("1300", true, true), "23712893729302");
 echo $impiegato->getHtmlImpiegato();
+
+echo "----------------------------------------------------------<br><br>";
