@@ -2,14 +2,12 @@
 
 // classe Stipendio:
 
-class Stipendio
-{
+class Stipendio{
     public $mensile;
     public $tredicesima;
     public $quattordicesima;
 
-    public function __construct($mensile, $tredicesima, $quattordicesima)
-    {
+    public function __construct($mensile, $tredicesima, $quattordicesima){
         $this->setMensile($mensile);
         $this->setTredicesima($tredicesima);
         $this->setQuattordicesima($quattordicesima);
@@ -166,19 +164,65 @@ class Impiegato extends Persona
         return $this->dataAssunzione;
     }
 
-    public function getHtmlImpiegato()
-    {
+    public function getHtmlImpiegato(){
         return parent::getHtmlPersona() .
             "<ul>
-            <li>Stipendio Annuale: " . $this->getStipendio()->getStipendioAnnuo() . "</li>" .
-            "<li>Data di assunzione: " . $this->getDataAssunzione() . "</li>" .
+                <li>Stipendio Annuale: " . $this->getStipendio()->getStipendioAnnuo() . " &euro;</li>" .
+                "<li>Data di assunzione: " . $this->getDataAssunzione() . "</li>" .
             "</ul>";
     }
 }
 
-echo "STIPENDIO:";
-$stipendio1 = new Stipendio("1500", true, true);
-echo $stipendio1->getHtmlStipendio();
+// classe capo:
+class Capo extends Persona
+{
+    private $dividendo;
+    private $bonus;
+
+    public function __construct($nome, $cognome, $dataNascita, $luogoNascita, $cf, $dividendo, $bonus)
+    {
+        parent::__construct($nome, $cognome, $dataNascita, $luogoNascita, $cf);
+        $this->setDividendo($dividendo);
+        $this->setBonus($bonus);
+    }
+
+    public function setDividendo($dividendo)
+    {
+        $this->dividendo = $dividendo;
+    }
+    public function getDividendo()
+    {
+        return $this->dividendo;
+    }
+    public function setBonus($bonus)
+    {
+        $this->bonus = $bonus;
+    }
+    public function getBonus()
+    {
+        return $this->bonus;
+    }
+
+    // metodo che restituisce il reddito annuale:
+    public function getRedditoAnnuo(){
+        return $this->dividendo * 12 + $this->bonus;
+    }
+
+    // metodo HTML:
+    public function getHtmlCapo()
+    {
+        return parent::getHtmlPersona() .
+            "<ul>
+                <li>Dividendo: " . $this->getDividendo() . " &euro;</li>" .
+                "<li>Bonus: " . $this->getBonus() . " &euro;</li>" .
+                "<li>Reddito Annuo: " . $this->getRedditoAnnuo() . " &euro;</li>" .
+            "</ul>";
+    }
+}
+
+// echo "STIPENDIO:";
+// $stipendio1 = new Stipendio("1500", true, true);
+// echo $stipendio1->getHtmlStipendio();
 
 
 echo "----------------------------------------------------------<br><br>";
@@ -190,7 +234,11 @@ echo $persona->getHtmlPersona();
 echo "----------------------------------------------------------<br><br>";
 
 echo "IMPIEGATO:";
-$impiegato = new Impiegato("Pinco", "Pallo", "1978-12-10", "Roma", "JDIOWE390E23732", new Stipendio("1300", true, true), "23712893729302");
+$impiegato = new Impiegato("Pinco", "Pallo", "1978-12-10", "Roma", "JDIOWE390E23732", new Stipendio("1300", true, true), "2023-03-01");
 echo $impiegato->getHtmlImpiegato();
 
 echo "----------------------------------------------------------<br><br>";
+
+echo "CAPO:";
+$capo1 = new Capo("Mario", "Rossi", "1978-12-10", "Roma", "JDIOWE390E23732", "2000", "6373");
+echo $capo1->getHtmlCapo();
